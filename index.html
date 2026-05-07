@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Switching in Local Network — تاقیکردنەوە</title>
+    <meta name="description" content="پلاتفۆرمی تاقیکردنەوەی Switching in Local Network - VLAN, Trunk, Access Ports">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Animated Network Background -->
+    <canvas id="networkCanvas"></canvas>
+
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- ============ LANDING PAGE ============ -->
+    <section id="landingPage" class="page active">
+        <div class="landing-container">
+            <div class="logo-glow"></div>
+            <div class="landing-icon">
+                <svg viewBox="0 0 100 100" class="switch-icon">
+                    <rect x="15" y="30" width="70" height="40" rx="8" fill="none" stroke="url(#iconGrad)" stroke-width="2.5"/>
+                    <circle cx="30" cy="50" r="4" fill="#00f0ff"/>
+                    <circle cx="45" cy="50" r="4" fill="#00f0ff"/>
+                    <circle cx="60" cy="50" r="4" fill="#7b61ff"/>
+                    <circle cx="75" cy="50" r="4" fill="#7b61ff"/>
+                    <line x1="30" y1="56" x2="30" y2="72" stroke="#00f0ff" stroke-width="1.5" opacity="0.6"/>
+                    <line x1="45" y1="56" x2="45" y2="72" stroke="#00f0ff" stroke-width="1.5" opacity="0.6"/>
+                    <line x1="60" y1="56" x2="60" y2="72" stroke="#7b61ff" stroke-width="1.5" opacity="0.6"/>
+                    <line x1="75" y1="56" x2="75" y2="72" stroke="#7b61ff" stroke-width="1.5" opacity="0.6"/>
+                    <line x1="30" y1="28" x2="30" y2="18" stroke="#00f0ff" stroke-width="1.5" opacity="0.6"/>
+                    <line x1="50" y1="28" x2="50" y2="12" stroke="#fff" stroke-width="1.5" opacity="0.4"/>
+                    <line x1="70" y1="28" x2="70" y2="18" stroke="#7b61ff" stroke-width="1.5" opacity="0.6"/>
+                    <defs>
+                        <linearGradient id="iconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#00f0ff"/>
+                            <stop offset="100%" stop-color="#7b61ff"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <h1 class="landing-title">
+                <span class="title-en">Switching in Local Network</span>
+                <span class="title-ku">سویچکردن لە تۆڕی ناوخۆیی</span>
+            </h1>
+            <p class="landing-subtitle">٢٠ پرسیاری چۆیسی • VLAN • Trunk • Access Ports</p>
+
+            <div class="mode-cards">
+                <button class="mode-card" id="studyModeBtn" onclick="startMode('study')">
+                    <div class="mode-icon">📖</div>
+                    <div class="mode-label">خوێندنەوە</div>
+                    <div class="mode-desc">Study Mode</div>
+                    <div class="mode-shine"></div>
+                </button>
+                <button class="mode-card" id="examModeBtn" onclick="startMode('exam')">
+                    <div class="mode-icon">🎯</div>
+                    <div class="mode-label">تاقیکردنەوە</div>
+                    <div class="mode-desc">Exam Mode</div>
+                    <div class="mode-shine"></div>
+                </button>
+            </div>
+
+            <div class="landing-stats">
+                <div class="stat-pill">
+                    <span class="stat-num">20</span>
+                    <span class="stat-label">پرسیار</span>
+                </div>
+                <div class="stat-pill">
+                    <span class="stat-num">2</span>
+                    <span class="stat-label">بەش</span>
+                </div>
+                <div class="stat-pill">
+                    <span class="stat-num">4</span>
+                    <span class="stat-label">هەڵبژاردن</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ STUDY PAGE ============ -->
+    <section id="studyPage" class="page">
+        <header class="top-bar">
+            <button class="back-btn" onclick="goHome()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l7-7-7-7"/></svg>
+                <span>گەڕانەوە</span>
+            </button>
+            <div class="page-title-bar">📖 خوێندنەوە</div>
+            <div class="set-toggle">
+                <button class="set-btn active" onclick="switchSet(1)">بەشی ١</button>
+                <button class="set-btn" onclick="switchSet(2)">بەشی ٢</button>
+            </div>
+        </header>
+
+        <div class="study-container" id="studyContainer">
+            <!-- Cards generated by JS -->
+        </div>
+    </section>
+
+    <!-- ============ EXAM PAGE ============ -->
+    <section id="examPage" class="page">
+        <header class="top-bar">
+            <button class="back-btn" onclick="goHome()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l7-7-7-7"/></svg>
+                <span>گەڕانەوە</span>
+            </button>
+            <div class="exam-progress-wrapper">
+                <div class="exam-progress-bar">
+                    <div class="exam-progress-fill" id="examProgressFill"></div>
+                </div>
+                <span class="exam-progress-text" id="examProgressText">١ / ٢٠</span>
+            </div>
+            <div class="exam-timer" id="examTimer">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                <span id="timerDisplay">00:00</span>
+            </div>
+        </header>
+
+        <div class="exam-container">
+            <div class="question-card" id="questionCard">
+                <div class="q-number" id="qNumber">Q1</div>
+                <div class="q-text" id="qText"></div>
+                <div class="q-options" id="qOptions">
+                    <!-- Options generated by JS -->
+                </div>
+            </div>
+
+            <div class="exam-nav">
+                <button class="nav-btn" id="prevBtn" onclick="prevQuestion()" disabled>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    پێشتر
+                </button>
+                <div class="q-dots" id="qDots"></div>
+                <button class="nav-btn primary" id="nextBtn" onclick="nextQuestion()">
+                    دواتر
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l7-7-7-7"/></svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ RESULTS PAGE ============ -->
+    <section id="resultsPage" class="page">
+        <div class="results-container">
+            <div class="results-trophy" id="resultsTrophy">🏆</div>
+            <h2 class="results-title" id="resultsTitle">ئەنجامەکان</h2>
+            <div class="results-score-ring">
+                <svg viewBox="0 0 200 200" class="score-ring-svg">
+                    <circle cx="100" cy="100" r="85" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="12"/>
+                    <circle cx="100" cy="100" r="85" fill="none" stroke="url(#scoreGrad)" stroke-width="12" 
+                            stroke-dasharray="534" stroke-dashoffset="534" stroke-linecap="round"
+                            id="scoreCircle" transform="rotate(-90 100 100)"/>
+                    <defs>
+                        <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#00f0ff"/>
+                            <stop offset="100%" stop-color="#7b61ff"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <div class="score-center">
+                    <div class="score-num" id="scoreNum">0</div>
+                    <div class="score-label">لە ٢٠</div>
+                </div>
+            </div>
+
+            <div class="results-stats">
+                <div class="r-stat correct">
+                    <div class="r-stat-icon">✓</div>
+                    <div class="r-stat-num" id="correctCount">0</div>
+                    <div class="r-stat-label">دروست</div>
+                </div>
+                <div class="r-stat wrong">
+                    <div class="r-stat-icon">✗</div>
+                    <div class="r-stat-num" id="wrongCount">0</div>
+                    <div class="r-stat-label">هەڵە</div>
+                </div>
+                <div class="r-stat time">
+                    <div class="r-stat-icon">⏱</div>
+                    <div class="r-stat-num" id="totalTime">0:00</div>
+                    <div class="r-stat-label">کات</div>
+                </div>
+            </div>
+
+            <div class="results-review" id="resultsReview">
+                <!-- Review cards generated by JS -->
+            </div>
+
+            <div class="results-actions">
+                <button class="action-btn primary" onclick="startMode('exam')">
+                    <span>دووبارە تاقیکردنەوە</span>
+                    🔄
+                </button>
+                <button class="action-btn" onclick="goHome()">
+                    <span>گەڕانەوە بۆ سەرەتا</span>
+                    🏠
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Confetti Canvas -->
+    <canvas id="confettiCanvas"></canvas>
+
+    <script src="app.js"></script>
+</body>
+</html>
