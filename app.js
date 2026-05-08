@@ -25,15 +25,57 @@ const set2 = [
   { q: "Which type of port is usually used between two switches?", opts: ["Access port","Console port","Trunk port","Ethernet port"], ans: 2 }
 ];
 
-const allQuestions = [...set1, ...set2];
+const set3 = [
+  { q: "DHCP is mainly used to:", opts: ["Block network traffic","Control switches","Turn off computers","Give IP addresses automatically"], ans: 3 },
+  { q: "Port security is used to:", opts: ["Increase speed","Control MAC addresses","Change IP address","Enable routing"], ans: 1 },
+  { q: "Without DHCP relay, the router will:", opts: ["Forward broadcasts","Save requests","Discard DHCP broadcasts","Assign IPs"], ans: 2 },
+  { q: "If port security rules are violated, the port may:", opts: ["Work faster","Ignore the device","Restrict or shut down","Change VLAN"], ans: 2 },
+  { q: "Reserved IP addresses should be used for:", opts: ["Servers","Mobile phones","Guests","Students"], ans: 0 },
+  { q: "Creating VLANs without buying another switch allows:", opts: ["One broadcast domain","Two switches","Fewer subnets","Two or more separate LANs"], ans: 3 },
+  { q: "Trunk ports:", opts: ["Belong to only one VLAN","Cannot carry VLAN traffic","Carry traffic of multiple VLANs","Are slower than access ports"], ans: 2 },
+  { q: "ISL (Inter-Switch Link) is used for:", opts: ["Assigning IP addresses","Tagging VLAN information onto Ethernet frames","Configuring access ports","Increasing bandwidth"], ans: 1 },
+  { q: "To verify VLAN configuration, you use:", opts: ["ping","traceroute","show vlan","ipconfig"], ans: 2 },
+  { q: "To assign a port to a specific VLAN, use:", opts: ["switchport trunk","switchport access","interface range vlan","vlan trunk encapsulation"], ans: 1 }
+];
+
+const set4 = [
+  { q: "Which command enables DHCP service on a Cisco router?", opts: ["service dhcp","ip dhcp enable","dhcp start","enable dhcp"], ans: 0 },
+  { q: "Which VLAN is the default VLAN on Cisco switches?", opts: ["VLAN 0","VLAN 1","VLAN 100","VLAN 255"], ans: 1 },
+  { q: "Access ports are mainly connected to:", opts: ["Routers","Switches","End devices","Servers only"], ans: 2 },
+  { q: "Which command is used to create a VLAN?", opts: ["switchport vlan","interface vlan","vlan [number]","ip vlan"], ans: 2 },
+  { q: "What is the purpose of a trunk link?", opts: ["Block VLAN traffic","Connect multiple VLANs between switches","Assign IP addresses","Improve wireless signal"], ans: 1 },
+  { q: "Which protocol is commonly used for VLAN tagging today?", opts: ["HTTP","FTP","802.1Q","ARP"], ans: 2 },
+  { q: "Which command shows the MAC addresses learned by a switch?", opts: ["show ip route","show mac address-table","show vlan brief","show interfaces"], ans: 1 },
+  { q: "DHCP stands for:", opts: ["Dynamic Host Configuration Protocol","Data Host Control Protocol","Dynamic Hardware Configuration Process","Device Host Communication Protocol"], ans: 0 },
+  { q: "Which device separates broadcast domains using VLANs?", opts: ["Hub","Repeater","Switch","Access Point"], ans: 2 },
+  { q: "What happens if two devices have the same IP address?", opts: ["Network works normally","Faster communication","IP conflict occurs","VLAN changes automatically"], ans: 2 }
+];
+
+const descriptiveQuestions = [
+  {
+    q: "What are port security violation modes?",
+    a: "Port security has three violation modes:\n\n• <strong>Protect</strong> — Drops packets from unknown MAC addresses silently. No log or alert is generated. The port stays up.\n\n• <strong>Restrict</strong> — Drops packets from unknown MAC addresses but sends an SNMP trap and logs the violation. The port stays up.\n\n• <strong>Shutdown</strong> (default) — Puts the port into an error-disabled state immediately. The port is effectively shut down and must be manually re-enabled with <code>shutdown</code> then <code>no shutdown</code>."
+  },
+  {
+    q: "What is Router on a Stick?",
+    a: "Router on a Stick is a method of inter-VLAN routing where a single physical router interface is divided into multiple sub-interfaces — one for each VLAN. The router connects to the switch via a single trunk link. Each sub-interface is configured with an IP address that acts as the default gateway for its VLAN. This allows traffic to be routed between VLANs without needing a separate physical interface for each one."
+  },
+  {
+    q: "What is the difference between Access port and Trunk port?",
+    a: "<strong>Access Port:</strong> Belongs to a single VLAN only. It carries untagged traffic and is typically connected to end devices like PCs, printers, and IP phones.\n\n<strong>Trunk Port:</strong> Carries traffic for multiple VLANs simultaneously using VLAN tagging (802.1Q). It is used to connect switches to other switches or to routers performing inter-VLAN routing.\n\nIn short — access ports serve individual devices, trunk ports serve the network backbone."
+  }
+];
+
+const allQuestions = [...set1, ...set2, ...set3, ...set4];
+const TOTAL_MCQ = allQuestions.length; // 40
 const letters = ['a','b','c','d'];
 
 // ============ STATE ============
 let currentMode = '';
 let currentSet = 1;
 let currentQ = 0;
-let userAnswers = new Array(20).fill(-1);
-let lockedQuestions = new Array(20).fill(false);
+let userAnswers = new Array(TOTAL_MCQ).fill(-1);
+let lockedQuestions = new Array(TOTAL_MCQ).fill(false);
 let timerInterval = null;
 let elapsedSeconds = 0;
 
@@ -144,34 +186,60 @@ function switchSet(num) {
   renderStudyCards();
 }
 
+function getSetData(num) {
+  if (num === 1) return set1;
+  if (num === 2) return set2;
+  if (num === 3) return set3;
+  if (num === 4) return set4;
+  return [];
+}
+
 function renderStudyCards() {
-  const data = currentSet === 1 ? set1 : set2;
   const container = document.getElementById('studyContainer');
   container.innerHTML = '';
-  data.forEach((item, i) => {
-    const card = document.createElement('div');
-    card.className = 'study-card';
-    card.innerHTML = `
-      <div class="study-q-num">Question ${(currentSet === 1 ? '' : '1') + ''}${i + 1}</div>
-      <div class="study-q-text">${item.q}</div>
-      <div class="study-options">
-        ${item.opts.map((opt, j) => `
-          <div class="study-opt ${j === item.ans ? 'correct' : ''}">
-            <span>${opt}</span>
-          </div>
-        `).join('')}
-      </div>
-    `;
-    container.appendChild(card);
-  });
+
+  if (currentSet === 5) {
+    // Descriptive questions
+    descriptiveQuestions.forEach((item, i) => {
+      const card = document.createElement('div');
+      card.className = 'study-card descriptive-card';
+      card.innerHTML = `
+        <div class="study-q-num">Descriptive Question ${i + 1}</div>
+        <div class="study-q-text">${item.q}</div>
+        <div class="descriptive-answer">
+          <div class="desc-answer-label">Answer:</div>
+          <div class="desc-answer-text">${item.a}</div>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  } else {
+    const data = getSetData(currentSet);
+    data.forEach((item, i) => {
+      const card = document.createElement('div');
+      card.className = 'study-card';
+      card.innerHTML = `
+        <div class="study-q-num">Question ${i + 1}</div>
+        <div class="study-q-text">${item.q}</div>
+        <div class="study-options">
+          ${item.opts.map((opt, j) => `
+            <div class="study-opt ${j === item.ans ? 'correct' : ''}">
+              <span>${opt}</span>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  }
   container.scrollTop = 0;
 }
 
 // ============ EXAM MODE ============
 function startExam() {
   currentQ = 0;
-  userAnswers = new Array(20).fill(-1);
-  lockedQuestions = new Array(20).fill(false);
+  userAnswers = new Array(TOTAL_MCQ).fill(-1);
+  lockedQuestions = new Array(TOTAL_MCQ).fill(false);
   elapsedSeconds = 0;
   clearInterval(timerInterval);
   timerInterval = setInterval(() => {
@@ -188,7 +256,7 @@ function startExam() {
 function renderDots() {
   const container = document.getElementById('qDots');
   container.innerHTML = '';
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < TOTAL_MCQ; i++) {
     const dot = document.createElement('div');
     let cls = 'q-dot';
     if (i === currentQ) cls += ' active';
@@ -206,7 +274,7 @@ function renderDots() {
 function renderQuestion() {
   const item = allQuestions[currentQ];
   const isLocked = lockedQuestions[currentQ];
-  document.getElementById('qNumber').textContent = `Question ${currentQ + 1} / 20`;
+  document.getElementById('qNumber').textContent = `Question ${currentQ + 1} / ${TOTAL_MCQ}`;
   document.getElementById('qText').textContent = item.q;
 
   const optContainer = document.getElementById('qOptions');
@@ -241,13 +309,13 @@ function renderQuestion() {
 
   // Progress
   const answered = userAnswers.filter(a => a >= 0).length;
-  document.getElementById('examProgressFill').style.width = ((answered / 20) * 100) + '%';
-  document.getElementById('examProgressText').textContent = `${currentQ + 1} / 20`;
+  document.getElementById('examProgressFill').style.width = ((answered / TOTAL_MCQ) * 100) + '%';
+  document.getElementById('examProgressText').textContent = `${currentQ + 1} / ${TOTAL_MCQ}`;
 
   // Nav buttons
   document.getElementById('prevBtn').disabled = currentQ === 0;
   const nextBtn = document.getElementById('nextBtn');
-  if (currentQ === 19) {
+  if (currentQ === TOTAL_MCQ - 1) {
     nextBtn.innerHTML = `تەواوکردن <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5L20 7"/></svg>`;
     nextBtn.className = 'nav-btn finish';
   } else {
@@ -294,10 +362,10 @@ function selectAnswer(idx) {
 
   // Update progress
   const answered = userAnswers.filter(a => a >= 0).length;
-  document.getElementById('examProgressFill').style.width = ((answered / 20) * 100) + '%';
+  document.getElementById('examProgressFill').style.width = ((answered / TOTAL_MCQ) * 100) + '%';
 
   // Auto-advance to next question after a delay
-  if (currentQ < 19) {
+  if (currentQ < TOTAL_MCQ - 1) {
     setTimeout(() => {
       currentQ++;
       renderQuestion();
@@ -306,7 +374,7 @@ function selectAnswer(idx) {
 }
 
 function nextQuestion() {
-  if (currentQ === 19) {
+  if (currentQ === TOTAL_MCQ - 1) {
     finishExam();
   } else {
     currentQ++;
@@ -326,8 +394,8 @@ function finishExam() {
   clearInterval(timerInterval);
   let correct = 0;
   userAnswers.forEach((a, i) => { if (a === allQuestions[i].ans) correct++; });
-  const wrong = 20 - correct;
-  const pct = correct / 20;
+  const wrong = TOTAL_MCQ - correct;
+  const pct = correct / TOTAL_MCQ;
 
   showPage('resultsPage');
 
@@ -346,6 +414,9 @@ function finishExam() {
   const m = String(Math.floor(elapsedSeconds / 60)).padStart(1, '0');
   const s = String(elapsedSeconds % 60).padStart(2, '0');
   document.getElementById('totalTime').textContent = `${m}:${s}`;
+
+  // Update score label
+  document.getElementById('scoreLabel').textContent = `لە ${TOTAL_MCQ}`;
 
   // Score ring animation
   const circle = document.getElementById('scoreCircle');

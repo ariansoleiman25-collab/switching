@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Switching in Local Network — تاقیکردنەوە</title>
-    <meta name="description" content="پلاتفۆرمی تاقیکردنەوەی Switching in Local Network - VLAN, Trunk, Access Ports">
+    <meta name="description" content="پلاتفۆرمی تاقیکردنەوەی Switching in Local Network - VLAN, Trunk, Access Ports, DHCP, Port Security">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -47,7 +47,7 @@
                 <span class="title-en">Switching in Local Network</span>
                 <span class="title-ku">سویچکردن لە تۆڕی ناوخۆیی</span>
             </h1>
-            <p class="landing-subtitle">٢٠ پرسیاری چۆیسی • VLAN • Trunk • Access Ports</p>
+            <p class="landing-subtitle">٤٠ پرسیاری چۆیسی + ٣ پرسیاری وەسفی • VLAN • Trunk • DHCP • Port Security</p>
 
             <div class="mode-cards">
                 <button class="mode-card" id="studyModeBtn" onclick="startMode('study')">
@@ -66,16 +66,16 @@
 
             <div class="landing-stats">
                 <div class="stat-pill">
-                    <span class="stat-num">20</span>
-                    <span class="stat-label">پرسیار</span>
+                    <span class="stat-num">40</span>
+                    <span class="stat-label">پرسیاری چۆیسی</span>
                 </div>
                 <div class="stat-pill">
-                    <span class="stat-num">2</span>
+                    <span class="stat-num">3</span>
+                    <span class="stat-label">پرسیاری وەسفی</span>
+                </div>
+                <div class="stat-pill">
+                    <span class="stat-num">5</span>
                     <span class="stat-label">بەش</span>
-                </div>
-                <div class="stat-pill">
-                    <span class="stat-num">4</span>
-                    <span class="stat-label">هەڵبژاردن</span>
                 </div>
             </div>
         </div>
@@ -92,6 +92,9 @@
             <div class="set-toggle">
                 <button class="set-btn active" onclick="switchSet(1)">بەشی ١</button>
                 <button class="set-btn" onclick="switchSet(2)">بەشی ٢</button>
+                <button class="set-btn" onclick="switchSet(3)">بەشی ٣</button>
+                <button class="set-btn" onclick="switchSet(4)">بەشی ٤</button>
+                <button class="set-btn set-btn-desc" onclick="switchSet(5)">وەسفی 📝</button>
             </div>
         </header>
 
@@ -111,7 +114,7 @@
                 <div class="exam-progress-bar">
                     <div class="exam-progress-fill" id="examProgressFill"></div>
                 </div>
-                <span class="exam-progress-text" id="examProgressText">١ / ٢٠</span>
+                <span class="exam-progress-text" id="examProgressText">١ / ٤٠</span>
             </div>
             <div class="exam-timer" id="examTimer">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
@@ -162,7 +165,7 @@
                 </svg>
                 <div class="score-center">
                     <div class="score-num" id="scoreNum">0</div>
-                    <div class="score-label">لە ٢٠</div>
+                    <div class="score-label" id="scoreLabel">لە ٤٠</div>
                 </div>
             </div>
 
